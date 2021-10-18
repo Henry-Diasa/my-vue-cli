@@ -1,0 +1,42 @@
+{
+  "name": "my-vue-cli",
+  "version": "1.0.0",
+  "description": "模拟vue-cli",
+  "main": "index.js",
+  "bin": {
+    "myvue": "bin/vue.js",
+    "myvue-init": "bin/vue-init.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Henry-Diasa/my-vue-cli.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Henry-Diasa/my-vue-cli/issues"
+  },
+  "homepage": "https://github.com/Henry-Diasa/my-vue-cli#readme",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^2.9.0",
+    "tildify": "^1.2.0",
+    "user-home": "^3.0.0",
+    "inquirer": "^6.0.0",
+    "semver": "^5.1.0",
+    "request": "^2.67.0",
+    "ora": "^1.3.0",
+    "rimraf": "^2.5.0",
+    "download-git-repo": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/tildify": "^2.0.2"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  }
+}
