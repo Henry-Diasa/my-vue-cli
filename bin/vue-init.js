@@ -1,22 +1,25 @@
 #!/usr/bin/env node
 const path = require("path");
-const download = require('download-git-repo')
+const download = require('download-git-repo') // 下载远程仓库
 const exists = require("fs").existsSync;
 const program = require("commander");
-const inquirer = require("inquirer");
+const inquirer = require("inquirer"); // 交互式命令  A collection of common interactive command line user interfaces
 const chalk = require("chalk");
 const rm = require('rimraf').sync
-const ora = require("ora");
-const tildify = require("tildify");
-const home = require("user-home");
+const ora = require("ora"); // 加载样式 Elegant terminal spinner
+const tildify = require("tildify"); // 转换路径  Convert an absolute path to tilde path
+const home = require("user-home"); // Get the path to the user home directory
 
 const logger = require("../lib/logger");
 const generate = require("../lib/generate");
 const localPath = require("../lib/local-path");
 const checkVersion = require("../lib/check-version");
 const warnings = require("../lib/warnings");
+
+
 const isLocalPath = localPath.isLocalPath;
 const getTemplatePath = localPath.getTemplatePath;
+
 program
   .usage("<template-name> [project-name]")
   .option("-c, --clone", "use git clone")
@@ -45,16 +48,17 @@ function help() {
 
 help();
 
+// 初始化init时 传递的一些参数 和 一些路径
 let template = program.args[0];
 const hasSlash = template.indexOf("/") > -1;
 const rawName = program.args[1];
 const inPlace = !rawName || rawName === ".";
-
 const name = inPlace ? path.relative("../", process.cwd()) : rawName;
 const to = path.resolve(rawName || ".");
+// vue init webpacl my-vue-cli2 --clone   program.clone => true
 const clone = program.clone || false
-const tmp = path.join(home, ".vue-templates", template.replace(/[\/:]/g, "-"));
 // 缓存模板地址
+const tmp = path.join(home, ".vue-templates", template.replace(/[\/:]/g, "-"));
 if (program.offline) {
   console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`);
   template = tmp;
@@ -83,6 +87,7 @@ if (inPlace || exists(to)) {
 
 function run() {
   if (isLocalPath(template)) {
+    // 本地模板
     const templatePath = getTemplatePath(template);
     if (exists(templatePath)) {
       generate(name, templatePath, to, (err) => {
@@ -93,6 +98,7 @@ function run() {
       logger.fatal('Local template "%s" not found.', template);
     }
   } else {
+    // 远程模板
     checkVersion(() => {
       if (!hasSlash) {
         // use official templates
@@ -114,13 +120,12 @@ function run() {
     });
   }
 }
-
+// 下载远程模板
 function downloadAndGenerate(template) {
   const spinner = ora("downloading template");
   spinner.start();
   // Remove if local template exists
   if (exists(tmp)) rm(tmp);
-  console.log(template, tmp, 111);
   download(template, tmp, { clone }, (err) => {
     spinner.stop();
     if (err)
